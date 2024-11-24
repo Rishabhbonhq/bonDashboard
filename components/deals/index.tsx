@@ -36,7 +36,7 @@ export const Deals = () => {
       
       const response = await apiClient.get(config.BACKEND_URL+"/v1/deals/all", {headers:{adminsecret:"12345"}}).catch((err)=>{
        if(err.status == 401){
-        router.push("/admin/login")
+        router.push("/login")
        }
       });
 

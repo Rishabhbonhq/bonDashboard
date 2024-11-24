@@ -46,22 +46,22 @@ export const SidebarWrapper = () => {
             /> */}
             <SidebarMenu title="Rewards">
               <SidebarItem
-                isActive={pathname === "/admin"}
+                isActive={pathname === "/"}
                 title="Offers"
                 icon={<AccountsIcon />}
-                href="/admin"
+                href="/"
               />
               <SidebarItem
-                isActive={pathname === "/admin/categories"}
+                isActive={pathname === "/categories"}
                 title="Categories"
                 icon={<AccountsIcon />}
-                href="/admin/categories"
+                href="categories"
               />
               <SidebarItem
-                isActive={pathname === "/admin/deals"}
+                isActive={pathname === "/deals"}
                 title="Deals"
                 icon={<AccountsIcon />}
-                href="/admin/deals"
+                href="deals"
               />
               {/* <SidebarItem
                 isActive={pathname === "/payments"}

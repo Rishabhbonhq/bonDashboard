@@ -33,7 +33,7 @@ export const Accounts = () => {
     try {
       const response = await apiClient.get(config.BACKEND_URL+"/v1/offers/all", {}).catch((err)=>{
         if(err.status == 401){
-          router.push("/admin/login")
+          router.push("/login")
          }
       });
       console.log(response?.data);
