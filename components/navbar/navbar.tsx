@@ -7,6 +7,7 @@ import { SearchIcon } from "../icons/searchicon";
 import { BurguerButton } from "./burguer-button";
 import { NotificationsDropdown } from "./notifications-dropdown";
 import { UserDropdown } from "./user-dropdown";
+import { DarkModeSwitch } from "./darkmodeswitch";
 
 interface Props {
   children: React.ReactNode;
@@ -23,10 +24,10 @@ export const NavbarWrapper = ({ children }: Props) => {
         }}
       >
         <NavbarContent className="md:hidden">
-          <BurguerButton />
+          {/* <BurguerButton /> */}
         </NavbarContent>
         <NavbarContent className="w-full max-md:hidden">
-          <Input
+          {/* <Input
             startContent={<SearchIcon />}
             isClearable
             className="w-full"
@@ -35,13 +36,13 @@ export const NavbarWrapper = ({ children }: Props) => {
               mainWrapper: "w-full",
             }}
             placeholder="Search..."
-          />
+          /> */}
         </NavbarContent>
         <NavbarContent
           justify="end"
           className="w-fit data-[justify=end]:flex-grow-0"
         >
-          <div className="flex items-center gap-2 max-md:hidden">
+          {/* <div className="flex items-center gap-2 max-md:hidden">
             <FeedbackIcon />
             <span>Feedback?</span>
           </div>
@@ -57,10 +58,11 @@ export const NavbarWrapper = ({ children }: Props) => {
             target={"_blank"}
           >
             <GithubIcon />
-          </Link>
-          <NavbarContent>
+          </Link> */}
+          {/* <NavbarContent>
             <UserDropdown />
-          </NavbarContent>
+          </NavbarContent> */}
+          <DarkModeSwitch />
         </NavbarContent>
       </Navbar>
       {children}

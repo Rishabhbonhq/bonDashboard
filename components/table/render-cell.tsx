@@ -6,13 +6,23 @@ import { EyeIcon } from "../icons/table/eye-icon";
 import { users } from "./data";
 
 interface Props {
-  user: (typeof users)[number];
+  dataItem: any;
   columnKey: string | React.Key;
+  onEdit: any;
+  onView: any;
+  onDelete: Function;
+  showDelete: boolean;
+  updateStatus: Function;
 }
 
-export const RenderCell = ({ user, columnKey }: Props) => {
+export const RenderCell = ({ dataItem, columnKey, onEdit, onDelete, showDelete, updateStatus }: Props) => {
   // @ts-ignore
-  const cellValue = user[columnKey];
+  console.log(onDelete)
+  const cellValue = dataItem[columnKey];
+  let isUrl = false;
+  if( typeof cellValue === 'string' && cellValue?.startsWith("http")){
+    isUrl = true;
+  }
   switch (columnKey) {
     case "name":
       return (
@@ -22,7 +32,7 @@ export const RenderCell = ({ user, columnKey }: Props) => {
           }}
           name={cellValue}
         >
-          {user.email}
+          {dataItem.email}
         </User>
       );
     case "role":
@@ -32,17 +42,20 @@ export const RenderCell = ({ user, columnKey }: Props) => {
             <span>{cellValue}</span>
           </div>
           <div>
-            <span>{user.team}</span>
+            <span>{dataItem.team}</span>
           </div>
         </div>
       );
     case "status":
       return (
         <Chip
+        
+          className="cursor-pointer"
           size="sm"
           variant="flat"
+          onClick={()=>updateStatus(dataItem.id, cellValue?.toLowerCase() === "active"?"DISABLED":"ACTIVE")}
           color={
-            cellValue === "active"
+            cellValue?.toLowerCase() === "active"
               ? "success"
               : cellValue === "paused"
               ? "danger"
@@ -52,38 +65,48 @@ export const RenderCell = ({ user, columnKey }: Props) => {
           <span className="capitalize text-xs">{cellValue}</span>
         </Chip>
       );
-
     case "actions":
       return (
         <div className="flex items-center gap-4 ">
-          <div>
+          {/* <div>
             <Tooltip content="Details">
-              <button onClick={() => console.log("View user", user.id)}>
+              <button onClick={() => console.log("View user", dataItem.id)}>
                 <EyeIcon size={20} fill="#979797" />
               </button>
             </Tooltip>
-          </div>
+          </div> */}
           <div>
             <Tooltip content="Edit user" color="secondary">
-              <button onClick={() => console.log("Edit user", user.id)}>
+              <button onClick={() => onEdit(dataItem.id)}>
                 <EditIcon size={20} fill="#979797" />
               </button>
             </Tooltip>
           </div>
-          <div>
+          {showDelete!==false?<div>
             <Tooltip
               content="Delete user"
               color="danger"
-              onClick={() => console.log("Delete user", user.id)}
+             
             >
-              <button>
+              <button  onClick={() => {
+                onDelete(dataItem.offer_id)
+              }}>
                 <DeleteIcon size={20} fill="#FF0080" />
               </button>
             </Tooltip>
-          </div>
+          </div>:<></>}
         </div>
       );
     default:
+      if(isUrl){
+        return (<div>
+          <Tooltip content="View">
+            <button onClick={() => window.open(cellValue)}>
+              <EyeIcon size={20} fill="#979797" />
+            </button>
+          </Tooltip>
+        </div>)
+      }
       return cellValue;
   }
 };

@@ -6,26 +6,51 @@ import { LoginFormType } from "@/helpers/types";
 import { Button, Input } from "@nextui-org/react";
 import { Formik } from "formik";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { redirect, useRouter } from "next/navigation";
+import { useCallback, useEffect } from "react";
+import axios from "axios";
+import config from "@/config/config";
+import apiClient from "@/helpers/axiosRequest";
+import checkLogin from "@/helpers/check-login";
 
 export const Login = () => {
   const router = useRouter();
 
   const initialValues: LoginFormType = {
-    email: "admin@acme.com",
-    password: "admin",
+    email: "",
+    password: "",
   };
 
   const handleLogin = useCallback(
     async (values: LoginFormType) => {
+      
+     apiClient.post("/v1/auth/admin-login", values).then((response)=>{
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("authToken", response.data.token.access.token);
+      }
+       
+        router.replace("/");
+      }).catch((err)=>{
+        console.log(err)
+      })
       // `values` contains email & password. You can use provider to connect user
 
-      await createAuthCookie();
-      router.replace("/");
+      //await createAuthCookie();
+      
     },
     [router]
   );
+
+  const loadData = async () =>{
+    let isLoggedIn = await checkLogin()
+    if(isLoggedIn)
+      router.push("/")
+  }
+
+  useEffect(()=>{
+    loadData()
+  },[])
 
   return (
     <>
@@ -68,12 +93,12 @@ export const Login = () => {
         )}
       </Formik>
 
-      <div className='font-light text-slate-400 mt-4 text-sm'>
+      {/* <div className='font-light text-slate-400 mt-4 text-sm'>
         Don&apos;t have an account ?{" "}
         <Link href='/register' className='font-bold'>
           Register here
         </Link>
-      </div>
+      </div> */}
     </>
   );
 };

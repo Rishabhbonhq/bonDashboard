@@ -10,10 +10,19 @@ export interface ProvidersProps {
 }
 
 export function Providers({ children, themeProps }: ProvidersProps) {
+  let theme = null;
+  if (typeof window !== "undefined") {
+    theme = localStorage.getItem("theme")
+  }
+
+  if(theme==null || theme==undefined){
+    theme = "system"
+  }
+  
   return (
     <NextUIProvider>
       <NextThemesProvider
-        defaultTheme='system'
+        defaultTheme={theme}
         attribute='class'
         {...themeProps}>
         {children}
