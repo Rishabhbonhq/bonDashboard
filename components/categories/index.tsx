@@ -30,7 +30,7 @@ export const Categories = () => {
     try {
       const response = await apiClient.get(config.BACKEND_URL+"/v1/categories/all", {headers:{adminsecret:"12345"}}).catch((err)=>{
         if(err.status==401){
-          router.push("/login")
+          router.push("/admin/login")
         }
       });
       console.log(response);

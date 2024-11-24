@@ -30,7 +30,7 @@ export const Login = () => {
         localStorage.setItem("authToken", response.data.token.access.token);
       }
        
-        router.replace("/");
+        router.replace("/admin");
       }).catch((err)=>{
         console.log(err)
       })
