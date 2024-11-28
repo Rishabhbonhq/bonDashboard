@@ -20,6 +20,7 @@ import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import config from "@/config/config";
+import apiClient from "@/helpers/axiosRequest";
 
 
 export const AddUser = (props: any) => {
@@ -59,9 +60,9 @@ export const AddUser = (props: any) => {
 
   const getProducts = async () => {
     try {
-      const response = await axios
+      const response = await apiClient
         .get(config.BACKEND_URL+"/v1/product/", {
-          headers: { adminsecret: "12345" },
+          headers: { adminsecret: config.ADMIN_SECRET },
         })
         .catch((err) => console.log(err));
       
@@ -80,7 +81,7 @@ export const AddUser = (props: any) => {
       if(props.edit===""){
       const response = await axios
         .post(config.BACKEND_URL+"/v1/offers/create", {offer: formData}, {
-          headers: { adminsecret: "12345" },
+          headers: { adminsecret: config.ADMIN_SECRET },
         })
         .catch((err) => console.log(err));
 
@@ -88,7 +89,7 @@ export const AddUser = (props: any) => {
       }else{
         const response = await axios
         .post(config.BACKEND_URL+"/v1/offers/update", {offer: formData}, {
-          headers: { adminsecret: "12345" },
+          headers: { adminsecret: config.ADMIN_SECRET },
         })
         .catch((err) => console.log(err));
 
@@ -132,7 +133,7 @@ export const AddUser = (props: any) => {
                   variant="bordered"
                   selectedKeys={[formData["product_id"]?.toString()]}
                 >
-                  {products.map((obj: any) => {
+                  {products?.map((obj: any) => {
                     return (
                       <SelectItem key={obj.product_id}>
                         {obj.product_name}

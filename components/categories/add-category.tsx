@@ -19,6 +19,8 @@ import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
+import apiClient from "@/helpers/axiosRequest";
+import config from "@/config/config";
 
 export const AddUser = (props: any) => {
   const ReactQuill = useMemo(
@@ -55,36 +57,21 @@ export const AddUser = (props: any) => {
     setFormData((prevState: any)=>({...prevState, [e.target.name]: e.target?.value}))
   };
 
-  const getProducts = async () => {
-    try {
-      const response = await axios
-        .get("http://localhost:5000/v1/product/", {
-          headers: { adminsecret: "12345" },
-        })
-        .catch((err) => console.log(err));
-      
-      setProducts(response?.data.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-
 
   const submitForm = async () => {
     try {
       if(props.edit===""){
-      const response = await axios
-        .post("http://localhost:5000/v1/categories/", {...formData,status:"ACTIVE"}, {
-          headers: { adminsecret: "12345" },
+      const response = await apiClient
+        .post(config.BACKEND_URL+"/v1/categories/", {...formData,status:"ACTIVE"}, {
+          headers: { adminsecret: config.ADMIN_SECRET },
         })
         .catch((err) => console.log(err));
 
         console.log(response);
       }else{
-        const response = await axios
-        .post("http://localhost:5000/v1/categories/update", {...formData}, {
-          headers: { adminsecret: "12345" },
+        const response = await apiClient
+        .post(config.BACKEND_URL+"/v1/categories/update", {...formData}, {
+          headers: { adminsecret: config.ADMIN_SECRET },
         })
         .catch((err) => console.log(err));
 

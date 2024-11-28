@@ -28,7 +28,7 @@ export const Categories = () => {
 
   const fetchData = async () => {
     try {
-      const response = await apiClient.get(config.BACKEND_URL+"/v1/categories/all", {headers:{adminsecret:"12345"}}).catch((err)=>{
+      const response = await apiClient.get(config.BACKEND_URL+"/v1/categories/all", {headers:{adminsecret: config.ADMIN_SECRET}}).catch((err)=>{
         if(err.status==401){
           router.push("/login")
         }

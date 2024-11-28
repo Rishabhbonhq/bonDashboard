@@ -14,6 +14,7 @@ import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import config from "../../config/config"
+import apiClient from "@/helpers/axiosRequest";
 
 export const AddUser = (props: any) => {
   const ReactQuill = useMemo(
@@ -39,9 +40,9 @@ export const AddUser = (props: any) => {
 
   const getCategories = async () => {
     try {
-      const response = await axios
+      const response = await apiClient
         .get(config.BACKEND_URL+"/v1/categories/all", {
-          headers: { adminsecret: "12345" },
+          headers: { adminsecret: config.ADMIN_SECRET },
         })
         .catch((err) => console.log(err));
       
@@ -81,7 +82,7 @@ export const AddUser = (props: any) => {
             config.BACKEND_URL+"/v1/deals/",
             { ...formData, status: "ACTIVE" },
             {
-              headers: { adminsecret: "12345" },
+              headers: { adminsecret: config.ADMIN_SECRET },
             }
           )
           .catch((err) => console.log(err));
@@ -93,7 +94,7 @@ export const AddUser = (props: any) => {
             config.BACKEND_URL+"/v1/deals/update",
             { ...formData },
             {
-              headers: { adminsecret: "12345" },
+              headers: { adminsecret: config.ADMIN_SECRET },
             }
           )
           .catch((err) => console.log(err));
