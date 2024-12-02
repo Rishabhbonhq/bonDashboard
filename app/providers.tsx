@@ -12,12 +12,13 @@ export interface ProvidersProps {
 export function Providers({ children, themeProps }: ProvidersProps) {
   let theme = null;
   if (typeof window !== "undefined") {
-    theme = localStorage.getItem("theme")
+    theme = localStorage.getItem("theme")?.trim()
   }
 
   if(theme==null || theme==undefined){
     theme = "system"
   }
+
   
   return (
     <NextUIProvider>

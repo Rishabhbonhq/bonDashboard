@@ -110,7 +110,7 @@ export const Accounts = () => {
         </div>
       </div>
       <div className="max-w-[95rem] mx-auto w-full">
-        <TableWrapper columns={offerColumns} data={filteredOffers} onEdit={onEdit} onDelete={onDelete} updateStatus={updateStatus}/>
+        <TableWrapper showDelete={false} columns={offerColumns} data={filteredOffers} onEdit={onEdit} onDelete={onDelete} updateStatus={updateStatus}/>
       </div>
     </div>
   );

@@ -67,6 +67,7 @@ export const TableWrapper = (props: any) => {
           )}
         </TableBody>
       </Table>
+      
       {/* Pagination component */}
       <Pagination
         total={totalPages}
@@ -74,7 +75,6 @@ export const TableWrapper = (props: any) => {
         onChange={handlePageChange}
         className="self-center"
         showControls
-        
       />
     </div>
   );

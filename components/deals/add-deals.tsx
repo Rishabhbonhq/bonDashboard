@@ -8,6 +8,7 @@ import {
   ModalHeader,
   Select,
   SelectItem,
+  Spinner,
 } from "@nextui-org/react";
 import React, { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
@@ -15,8 +16,13 @@ import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import config from "../../config/config"
 import apiClient from "@/helpers/axiosRequest";
+import { toast } from 'react-hot-toast';
+import UploadInput from "../inputs/UploadInput";
 
 export const AddUser = (props: any) => {
+  const [loading, setLoading] = useState(false)
+  const [dealImage, setDealImage]=useState(null)
+
   const ReactQuill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
@@ -74,34 +80,63 @@ export const AddUser = (props: any) => {
     }));
   };
 
-  const submitForm = async () => {
+  const uploadImage = async (file:any) => {
+    const formData = new FormData()
+    formData.append("file", file)
+    
+    let response = await axios.post(config.BACKEND_URL + "/v1/users/upload-images", formData, { headers:{"Content-Type": "multipart/form-data"} }).catch((err)=>{
+      console.log("Upload Images", err)
+    })
+    return response?.data?.url
+  }
+
+  const submitForm = async (closeModal: Function) => {
     try {
+      setLoading(true)
+      let submitForm={...formData}
+
+      if(dealImage!=null){
+        let imageURL = await uploadImage(dealImage)
+        submitForm["deal_image"]=imageURL
+      }
+
       if (props.edit === "") {
         const response = await axios
           .post(
             config.BACKEND_URL+"/v1/deals/",
-            { ...formData, status: "ACTIVE" },
+            { ...submitForm, status: "ACTIVE" },
             {
               headers: { adminsecret: config.ADMIN_SECRET },
             }
           )
-          .catch((err) => console.log(err));
+          .catch((err) => toast.error(err.response?err.response?.data?.message:"Something Went Wrong!"));
 
         console.log(response);
+
+        if(response!=undefined){
+          toast.success(typeof response==="object"&&response?.data?.message)
+        }
       } else {
         const response = await axios
           .post(
             config.BACKEND_URL+"/v1/deals/update",
-            { ...formData },
+            { ...submitForm },
             {
               headers: { adminsecret: config.ADMIN_SECRET },
             }
           )
-          .catch((err) => console.log(err));
+          .catch((err) => toast.error(err.response?err.response?.data?.message:"Something Went Wrong!"));
 
         console.log(response);
+
+        if(response!=undefined){
+          toast.success(typeof response==="object"&&response?.data?.message)
+        }
       }
       props.fetchData()
+      closeModal()
+      setLoading(false)
+
     } catch (err) {
       console.log(err);
     }
@@ -121,6 +156,7 @@ export const AddUser = (props: any) => {
         onClose={() => {
           props.setEdit("");
           setFormData({});
+          setDealImage(null)
         }}
       >
         <ModalContent style={{ height: "60%", overflowY: "auto" }}>
@@ -153,6 +189,11 @@ export const AddUser = (props: any) => {
                   placeholder="Enter Image URL"
                   variant="bordered"
                   value={formData.deal_image}
+                />
+                <UploadInput
+                  label="Image URL"
+                  value={formData.deal_image}
+                  setFileParent={setDealImage}
                 />
                 <Input
                   label="Points"
@@ -244,14 +285,16 @@ export const AddUser = (props: any) => {
                   Close
                 </Button>
                 <Button
+                  isDisabled={loading}
+                  disabled={loading}
                   color="primary"
                   onPress={() => {
-                    onClose();
+               
                     props.setEdit("");
-                    submitForm();
+                    submitForm(onClose);
                   }}
                 >
-                  Submit
+                  {loading?<Spinner color="white"/>:"Submit"}
                 </Button>
               </ModalFooter>
             </>

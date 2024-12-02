@@ -107,7 +107,7 @@ export const Categories = () => {
         </div>
       </div>
       <div className="max-w-[95rem] mx-auto w-full">
-        <TableWrapper columns={offerColumns} data={filteredOffers} onEdit={onEdit} onDelete={onDelete} updateStatus={updateStatus}/>
+        <TableWrapper columns={offerColumns} data={filteredOffers} onEdit={onEdit} onDelete={onDelete} updateStatus={updateStatus} showDelete={false}/>
       </div>
     </div>
   );

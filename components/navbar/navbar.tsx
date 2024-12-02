@@ -1,4 +1,4 @@
-import { Input, Link, Navbar, NavbarContent } from "@nextui-org/react";
+import { Button, Input, Link, Navbar, NavbarContent } from "@nextui-org/react";
 import React from "react";
 import { FeedbackIcon } from "../icons/navbar/feedback-icon";
 import { GithubIcon } from "../icons/navbar/github-icon";
@@ -8,12 +8,18 @@ import { BurguerButton } from "./burguer-button";
 import { NotificationsDropdown } from "./notifications-dropdown";
 import { UserDropdown } from "./user-dropdown";
 import { DarkModeSwitch } from "./darkmodeswitch";
+import { useRouter } from "next/navigation";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const NavbarWrapper = ({ children }: Props) => {
+  const router = useRouter()
+  const handleLogout = () => {
+    window.localStorage.clear()
+    router.push("/login")
+  }
   return (
     <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
       <Navbar
@@ -63,6 +69,9 @@ export const NavbarWrapper = ({ children }: Props) => {
             <UserDropdown />
           </NavbarContent> */}
           <DarkModeSwitch />
+          <Button onClick={handleLogout} color="primary" variant="ghost">
+            Logout
+          </Button>
         </NavbarContent>
       </Navbar>
       {children}

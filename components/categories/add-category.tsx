@@ -14,6 +14,7 @@ import {
   Select,
   SelectSection,
   SelectItem,
+  Spinner
 } from "@nextui-org/react";
 import React, { FormEvent, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
@@ -21,8 +22,14 @@ import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 import apiClient from "@/helpers/axiosRequest";
 import config from "@/config/config";
+import UploadInput from "../inputs/UploadInput";
+import { toast } from 'react-hot-toast';
 
 export const AddUser = (props: any) => {
+  const [loading, setLoading] = useState(false)
+
+  const [fileImage, setFileImage] = useState(null)
+  const [fileBgImage, setFileBgImage] = useState(null)
   const ReactQuill = useMemo(
     () => dynamic(() => import("react-quill"), { ssr: false }),
     []
@@ -34,6 +41,16 @@ export const AddUser = (props: any) => {
   const [products, setProducts] = useState([]);
   const [backgroundColor, setBackgroundColor] = useState("white");
   const [textColor, setTextColor] = useState("black");
+
+  const uploadImage = async (file:any) => {
+    const formData = new FormData()
+    formData.append("file", file)
+    
+    let response = await axios.post(config.BACKEND_URL + "/v1/users/upload-images", formData, { headers:{"Content-Type": "multipart/form-data"} }).catch((err)=>{
+      console.log("Upload Images", err)
+    })
+    return response?.data?.url
+  }
 
   useEffect(()=>{
     console.log(props)
@@ -58,27 +75,56 @@ export const AddUser = (props: any) => {
   };
 
 
-  const submitForm = async () => {
+  const submitForm = async (closeModal:Function) => {
     try {
+      setLoading(true)
+      let submitForm = {...formData}
+
+      if(fileImage!=null){
+        let imageURL = await uploadImage(fileImage)
+        submitForm["category_image"]=imageURL
+      }
+
+      if(fileBgImage!=null){
+        let imageURL = await uploadImage(fileBgImage)
+        submitForm["category_bg_image"]=imageURL
+      }
+
       if(props.edit===""){
       const response = await apiClient
-        .post(config.BACKEND_URL+"/v1/categories/", {...formData,status:"ACTIVE"}, {
+        .post(config.BACKEND_URL+"/v1/categories/", {...submitForm,status:"ACTIVE"}, {
           headers: { adminsecret: config.ADMIN_SECRET },
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+
+          toast.error(err.response?err.response?.data?.message:"Something Went Wrong!")
+        });
+
+        if(response!=undefined){
+          toast.success(typeof response==="object"&&response?.data?.message)
+        }
 
         console.log(response);
       }else{
         const response = await apiClient
-        .post(config.BACKEND_URL+"/v1/categories/update", {...formData}, {
+        .post(config.BACKEND_URL+"/v1/categories/update", {...submitForm}, {
           headers: { adminsecret: config.ADMIN_SECRET },
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err)
+          toast.error(err.response?err.response?.data?.message:"Something Went Wrong!")
+        });
+
+        if(response!=undefined){
+          toast.success(typeof response==="object"&&response?.data?.message)
+        }
 
         console.log(response);
       }
 
       props.fetchData()
+      closeModal()
+      setLoading(false)
       
     } catch (err) {
       console.log(err);
@@ -99,6 +145,8 @@ export const AddUser = (props: any) => {
         onClose={() => {
           props.setEdit("");
           setFormData({})
+          setFileBgImage(null)
+          setFileImage(null)
         }}
       >
         <ModalContent style={{ height: "47%", overflowY: "auto" }}>
@@ -118,19 +166,15 @@ export const AddUser = (props: any) => {
                   value={formData["category_name"]}
                 />
                 
-                <Input
-                  name="category_image"
-                  onChange={handleFormChange}
+                <UploadInput 
+                  setFileParent={setFileImage}
                   label="Category Image URL"
-                  variant="bordered"
                   value={formData["category_image"]}
                 />
 
-                <Input
-                  name="category_bg_image"
-                  onChange={handleFormChange}
+                <UploadInput 
+                  setFileParent={setFileBgImage}
                   label="Category Bg Image URL"
-                  variant="bordered"
                   value={formData["category_bg_image"]}
                 />
                
@@ -147,16 +191,18 @@ export const AddUser = (props: any) => {
                   Close
                 </Button>
                 <Button
+                  isDisabled={loading}
+                  disabled={loading}
                   color="primary"
                   onPress={() => {
                     // Add code to handle form submission here, including sending `description` as HTML content
                     // Replace with API call
-                    onClose();
+                    
                     props.setEdit("");
-                    submitForm();
+                    submitForm(onClose);
                   }}
                 >
-                  Submit
+                  {loading?<Spinner color="white" />:"Submit"}
                 </Button>
               </ModalFooter>
             </>

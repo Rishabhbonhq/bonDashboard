@@ -1,6 +1,6 @@
 import React from "react";
 import { Sidebar } from "./sidebar.styles";
-import { Avatar, Tooltip } from "@nextui-org/react";
+import { Avatar, Divider, Tooltip } from "@nextui-org/react";
 import { CompaniesDropdown } from "./companies-dropdown";
 import { HomeIcon } from "../icons/sidebar/home-icon";
 import { PaymentsIcon } from "../icons/sidebar/payments-icon";
@@ -35,9 +35,12 @@ export const SidebarWrapper = () => {
           className: "m-0 p-0"
         })}
       >
-        
+        <h1 className="text-4xl font-bold mt-2 pl-2">
+          BON ADMIN
+        </h1>
+        <Divider className="mt-4"/> 
         <div className="flex flex-col justify-between h-full">
-          <div className={Sidebar.Body()}>
+          <div className={"flex flex-col gap-6 mt-2 px-2"}>
             {/* <SidebarItem
               title="Home"
               icon={<HomeIcon />}
