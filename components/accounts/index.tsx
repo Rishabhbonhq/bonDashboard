@@ -10,13 +10,13 @@ import apiClient from "@/helpers/axiosRequest";
 import { useRouter } from "next/navigation";
 
 export const offerColumns = [
+  { name: "PRODUCT NAME", uid: "product_name" },
   { name: "OFFER NAME", uid: "offer_name" },
   { name: "OFFER PRICE (USD)", uid: "offer_price" },
   { name: "OFFER TYPE", uid: "offer_type" },
   { name: "OFFER START DATE", uid: "offer_start_at" },
   { name: "OFFER START DATE", uid: "offer_end_at" },
   { name: "IMAGE", uid: "image" },
-  { name: "PRODUCT", uid: "product_name" },
   { name: "STATUS", uid: "status" },
   { name: "ACTIONS", uid: "actions" },
 ];
@@ -58,8 +58,10 @@ export const Accounts = () => {
     console.log(offers)
     const filtered = offers.filter((offer: any) =>
       offer?.offer_name?.toLowerCase()
+        .includes(query) || offer?.product_name?.toLowerCase()
         .includes(query)
     );
+    
     setFilteredOffers(filtered);
   };
 
@@ -92,7 +94,7 @@ export const Accounts = () => {
               input: "w-full",
               mainWrapper: "w-full",
             }}
-            placeholder="Search offers"
+            placeholder="Search"
             value={searchQuery}
             onChange={handleSearch} // Bind to search handler
           />

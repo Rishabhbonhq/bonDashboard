@@ -175,28 +175,35 @@ export const AddUser = (props: any) => {
                   value={formData.deal_name}
                 />
                 <Input
-                  label="Brand"
+                  label="Deal Brand"
                   name="deal_brand"
                   onChange={handleFormChange}
                   placeholder="Enter Brand"
                   variant="bordered"
                   value={formData.deal_brand}
                 />
-                <Input
-                  label="Image URL"
-                  name="deal_image"
-                  onChange={handleFormChange}
-                  placeholder="Enter Image URL"
-                  variant="bordered"
-                  value={formData.deal_image}
-                />
+                <Select
+                label="Category"
+                name="category_id"
+                placeholder="Select Category"
+                onChange={handleFormChange}
+                selectedKeys={[formData["category_id"]?.toString()]}
+                variant="bordered"
+              >
+                {categories.map((obj: any) => (
+                  <SelectItem key={obj.id}>
+                    {obj.category_name}
+                  </SelectItem>
+                ))}
+              </Select>
+                
                 <UploadInput
-                  label="Image URL"
+                  label="Deal Image"
                   value={formData.deal_image}
                   setFileParent={setDealImage}
                 />
                 <Input
-                  label="Points"
+                  label="Deal Points"
                   name="deal_points"
                   type="number"
                   onChange={handleFormChange}
@@ -213,7 +220,7 @@ export const AddUser = (props: any) => {
                   value={formData.deal_link}
                 />
                 <Input
-                  label="Product Price"
+                  label="Product Price ($)"
                   name="product_price"
                   type="number"
                   onChange={handleFormChange}
@@ -222,7 +229,7 @@ export const AddUser = (props: any) => {
                   value={formData.product_price}
                 />
                 <Input
-                  label="Deal Price"
+                  label="Deal Price ($)"
                   name="deal_price"
                   type="number"
                   onChange={handleFormChange}
@@ -231,7 +238,7 @@ export const AddUser = (props: any) => {
                   value={formData.deal_price}
                 />
                 <Input
-                  label="Discount"
+                  label="Discount (%)"
                   name="discount"
                   type="number"
                   onChange={handleFormChange}
@@ -248,20 +255,7 @@ export const AddUser = (props: any) => {
                   value={formData.coupon}
                 />
 
-              <Select
-                label="Category"
-                name="category_id"
-                placeholder="Select Category"
-                onChange={handleFormChange}
-                selectedKeys={[formData["category_id"]?.toString()]}
-                variant="bordered"
-              >
-                {categories.map((obj: any) => (
-                  <SelectItem key={obj.id}>
-                    {obj.category_name}
-                  </SelectItem>
-                ))}
-              </Select>
+              
                 
                 {/* <Input
                   label="Category ID"

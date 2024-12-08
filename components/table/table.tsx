@@ -27,6 +27,10 @@ export const TableWrapper = (props: any) => {
   const endIndex = startIndex + itemsPerPage;
   const paginatedData = data.slice(startIndex, endIndex);
 
+  useEffect(()=>{
+    setCurrentPage(1)
+  },[data])
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };

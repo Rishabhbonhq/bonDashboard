@@ -15,6 +15,11 @@ interface Props {
   updateStatus: Function;
 }
 
+function isValidDate(dateString:any) {
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
+}
+
 export const RenderCell = ({ dataItem, columnKey, onEdit, onDelete, showDelete, updateStatus }: Props) => {
   // @ts-ignore
   console.log(onDelete)
@@ -23,6 +28,7 @@ export const RenderCell = ({ dataItem, columnKey, onEdit, onDelete, showDelete, 
   if( typeof cellValue === 'string' && cellValue?.startsWith("http")){
     isUrl = true;
   }
+  let isDate=isValidDate(cellValue)
   switch (columnKey) {
     case "name":
       return (
@@ -106,6 +112,14 @@ export const RenderCell = ({ dataItem, columnKey, onEdit, onDelete, showDelete, 
             </button>
           </Tooltip>
         </div>)
+      }
+      if(isDate){
+        let date = new Date(cellValue)
+        return new Intl.DateTimeFormat('en-GB', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+      }).format(date);
       }
       return cellValue;
   }

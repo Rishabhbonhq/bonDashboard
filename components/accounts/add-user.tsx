@@ -24,6 +24,11 @@ import config from "@/config/config";
 import apiClient from "@/helpers/axiosRequest";
 import UploadInput from "@/components/inputs/UploadInput"
 import { toast } from 'react-hot-toast';
+import {
+  Autocomplete,
+  AutocompleteSection,
+  AutocompleteItem
+  } from "@nextui-org/autocomplete";
 
 export const AddUser = (props: any) => {
   const [loading, setLoading] = useState(false)
@@ -58,6 +63,7 @@ export const AddUser = (props: any) => {
   };
 
   const handleFormChange = (e: any) => {
+    console.log(e)
     setFormData((prevState: any)=>({...prevState, [e.target.name]: e.target?.value}))
   };
 
@@ -137,6 +143,10 @@ export const AddUser = (props: any) => {
     }
   };
 
+  const onSelectionChange = (key: any) => {
+    setFormData((prevState: any)=>({...prevState, ["product_id"]:key}))
+  }
+
   console.log(formData)
 
   return (
@@ -163,22 +173,18 @@ export const AddUser = (props: any) => {
               </ModalHeader>
               <ModalBody >
                 <div className="grid grid-cols-2 gap-2">
-                <Select      
+                
+                <Autocomplete
                   label="Product"
                   placeholder="Select Product"
                   name="product_id"
-                  onChange={handleFormChange}
                   variant="bordered"
-                  selectedKeys={[formData["product_id"]?.toString()]}
+                  defaultItems={products}
+                  selectedKey={formData["product_id"]?.toString()}
+                  onSelectionChange={onSelectionChange}
                 >
-                  {products?.map((obj: any) => {
-                    return (
-                      <SelectItem key={obj.product_id}>
-                        {obj.product_name}
-                      </SelectItem>
-                    );
-                  })}
-                </Select>
+                  {(product:any) => <AutocompleteItem key={product?.product_id}>{product?.product_name}</AutocompleteItem>}
+                </Autocomplete>
                 <Input
                   label="Offer Name"
                   name="offer_name"
