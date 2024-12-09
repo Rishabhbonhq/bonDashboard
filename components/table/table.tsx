@@ -63,7 +63,7 @@ export const TableWrapper = (props: any) => {
                     onDelete:  props.onDelete,
                     showDelete: props.showDelete,
                     updateStatus: props.updateStatus,
-
+                    isDate: columns?.filter((obj:any)=>obj.uid===columnKey)[0].isDate?columns?.filter((obj:any)=>obj.uid===columnKey)[0].isDate:false
                   })}
                 </TableCell>
               )}

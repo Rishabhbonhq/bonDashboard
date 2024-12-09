@@ -13,14 +13,10 @@ interface Props {
   onDelete: Function;
   showDelete: boolean;
   updateStatus: Function;
+  isDate: boolean;
 }
 
-function isValidDate(dateString:any) {
-  const date = new Date(dateString);
-  return !isNaN(date.getTime());
-}
-
-export const RenderCell = ({ dataItem, columnKey, onEdit, onDelete, showDelete, updateStatus }: Props) => {
+export const RenderCell = ({ dataItem, columnKey, onEdit, onDelete, showDelete, updateStatus, isDate }: Props) => {
   // @ts-ignore
   console.log(onDelete)
   const cellValue = dataItem[columnKey];
@@ -28,7 +24,7 @@ export const RenderCell = ({ dataItem, columnKey, onEdit, onDelete, showDelete, 
   if( typeof cellValue === 'string' && cellValue?.startsWith("http")){
     isUrl = true;
   }
-  let isDate=isValidDate(cellValue)
+ 
   switch (columnKey) {
     case "name":
       return (
