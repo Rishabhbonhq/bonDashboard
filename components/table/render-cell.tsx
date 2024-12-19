@@ -110,12 +110,17 @@ export const RenderCell = ({ dataItem, columnKey, onEdit, onDelete, showDelete, 
         </div>)
       }
       if(isDate){
-        let date = new Date(cellValue)
-        return new Intl.DateTimeFormat('en-GB', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric'
-      }).format(date);
+        try{
+          let date = new Date(cellValue)
+          return new Intl.DateTimeFormat('en-GB', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        }).format(date);
+        }catch(err){
+          return ""
+        }
+        
       }
       return cellValue;
   }
