@@ -18,7 +18,7 @@ interface Props {
 
 export const RenderCell = ({ dataItem, columnKey, onEdit, onDelete, showDelete, updateStatus, isDate }: Props) => {
   // @ts-ignore
-  console.log(onDelete)
+  console.log(dataItem)
   const cellValue = dataItem[columnKey];
   let isUrl = false;
   if( typeof cellValue === 'string' && cellValue?.startsWith("http")){
@@ -91,7 +91,8 @@ export const RenderCell = ({ dataItem, columnKey, onEdit, onDelete, showDelete, 
              
             >
               <button  onClick={() => {
-                onDelete(dataItem.offer_id)
+                console.log(dataItem)
+                onDelete(dataItem.id || dataItem.offer_id) 
               }}>
                 <DeleteIcon size={20} fill="#FF0080" />
               </button>

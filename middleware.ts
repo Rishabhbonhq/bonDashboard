@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
 
   if (
-    (pathname === "/" || pathname === "/deals" || pathname === "/categories") &&
+    (pathname === "/" || pathname === "/deals" || pathname === "/categories" || pathname === "/blogs") &&
     !request.headers.has("authorization")
   )
     return NextResponse.redirect(new URL("/login", request.url));
