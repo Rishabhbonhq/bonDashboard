@@ -10,7 +10,7 @@ import {
   SelectItem,
   Spinner,
 } from "@nextui-org/react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
@@ -18,8 +18,10 @@ import config from "@/config/config";
 import apiClient from "@/helpers/axiosRequest";
 import { toast } from 'react-hot-toast';
 import UploadInput from "../inputs/UploadInput";
+import { Editor } from '@tinymce/tinymce-react';
 
 export const AddBlog = (props) => {
+  const editorRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [featuredImage, setFeaturedImage] = useState(null);
 
@@ -33,8 +35,7 @@ export const AddBlog = (props) => {
     image: "",
     content: "",
     status: "DRAFT",
-    description: "",
-    read_time: "",
+    description: ""
   });
 
   const [categories] = useState([
@@ -42,7 +43,7 @@ export const AddBlog = (props) => {
     { id: 2, name: "Design" },
     { id: 3, name: "Marketing" },
     { id: 4, name: "Business" },
-  ]);
+  ]); 
 
   useEffect(() => {
     let editingBlog = props.data.filter(
@@ -62,6 +63,7 @@ export const AddBlog = (props) => {
   };
 
   const handleContentChange = (value) => {
+    console.log(value)
     setFormData((prevState) => ({
       ...prevState,
       content: value,
@@ -96,6 +98,7 @@ export const AddBlog = (props) => {
     try {
       setLoading(true);
       let submitData = { ...formData };
+      submitData.content = editorRef.current.getContent();
 
       if (featuredImage != null) {
         let imageURL = await uploadImage(featuredImage);
@@ -128,6 +131,7 @@ export const AddBlog = (props) => {
           });
 
         if (response !== undefined) {
+          closeModal();
           toast.success(typeof response === "object" && response?.data?.message);
         }
       } else {
@@ -153,13 +157,15 @@ export const AddBlog = (props) => {
             toast.error(err.response ? err.response?.data?.message : "Something Went Wrong!");
           });
 
+
         if (response !== undefined) {
+          closeModal();
           toast.success(typeof response === "object" && response?.data?.message);
         }
       }
 
       props.fetchData();
-      closeModal();
+      
     } catch (err) {
       console.log(err);
       toast.error("Error saving blog");
@@ -189,8 +195,7 @@ export const AddBlog = (props) => {
                 {props.edit !== "" ? "Edit Blog" : "Add Blog"}
               </ModalHeader>
               <ModalBody>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Input
+              <Input
                     label="Title"
                     name="title"
                     onChange={handleFormChange}
@@ -206,7 +211,9 @@ export const AddBlog = (props) => {
                     variant="bordered"
                     value={formData.description}
                   />
-                   <Input
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 
+                   {/* <Input
                     label="Read Time"
                     name="read_time"
                     onChange={handleFormChange}
@@ -214,7 +221,7 @@ export const AddBlog = (props) => {
                     variant="bordered"
                     value={formData.read_time}
                     type="number"
-                  />
+                  /> */}
                   
                   {/* <Input
                     label="Author"
@@ -278,15 +285,22 @@ export const AddBlog = (props) => {
                 /> */}
                 
                 <div className="mt-4">
-                  <label className="mb-2 block text-sm font-medium">
-                    Content
-                  </label>
-                  <ReactQuill
-                    theme="snow"
-                    defaultValue={formData.content}
-                    onChange={handleContentChange}
-                    style={{ height: "200px", marginBottom: "50px" }}
-                  />
+                  <Editor
+                  onInit={(evt, editor) => editorRef.current = editor}
+                  apiKey='8j7wiv7q5l0b5pku7vldwja4uqqok48yoq6pl9nlq63x1koz'
+                  ref={editorRef}
+        initialValue={formData.content}
+        init={{
+          height: 300,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+          ],
+          toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+        }}
+        
+      />
                 </div>
               </ModalBody>
               <ModalFooter>
