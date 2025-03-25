@@ -20,8 +20,34 @@ import { toast } from 'react-hot-toast';
 import UploadInput from "../inputs/UploadInput";
 import { Editor } from '@tinymce/tinymce-react';
 
-export const AddBlog = (props) => {
-  const editorRef = useRef(null);
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * Component for adding and editing blog posts.
+ * 
+ * This component provides a modal interface for creating or updating a blog post. 
+ * It handles form inputs for the blog title, description, featured image, status, 
+ * and content. The content is managed via a rich text editor. Users can choose 
+ * between different categories and set the blog status to either draft or published.
+ * 
+ * Props:
+ * - props.data: Array of blog data for editing purposes.
+ * - props.edit: ID of the blog being edited, if applicable.
+ * - props.onOpen: Callback to open the modal.
+ * - props.isOpen: Boolean indicating if the modal is open.
+ * - props.onOpenChange: Callback for when modal open state changes.
+ * - props.setEdit: Function to reset the edit state.
+ * - props.fetchData: Callback to fetch updated blog data.
+ * 
+ * State:
+ * - loading: Loading indicator for form submission.
+ * - featuredImage: Image file for the blog post's featured image.
+ * - formData: Object containing blog form data including title, image, content, status, and description.
+ * - categories: Static array of blog categories.
+ */
+
+/******  8c9b41d9-f8f5-4a2c-9f53-e5754d7ca9a4  *******/
+export const AddBlog = (props:any) => {
+  const editorRef:any = useRef(null);
   const [loading, setLoading] = useState(false);
   const [featuredImage, setFeaturedImage] = useState(null);
 
@@ -47,7 +73,7 @@ export const AddBlog = (props) => {
 
   useEffect(() => {
     let editingBlog = props.data.filter(
-      (obj) => obj.blog_id === props.edit
+      (obj:any) => obj.blog_id === props.edit
     )[0];
 
     if (editingBlog === undefined) editingBlog = {};
@@ -55,14 +81,14 @@ export const AddBlog = (props) => {
     setFormData((prevState) => ({ ...prevState, ...editingBlog }));
   }, [props.edit, props.data]);
 
-  const handleFormChange = (e) => {
+  const handleFormChange = (e:any) => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target?.value,
     }));
   };
 
-  const handleContentChange = (value) => {
+  const handleContentChange = (value:any) => {
     console.log(value)
     setFormData((prevState) => ({
       ...prevState,
@@ -70,7 +96,7 @@ export const AddBlog = (props) => {
     }));
   };
 
-  const uploadImage = async (file) => {
+  const uploadImage = async (file:any) => {
     const formData = new FormData();
     formData.append("file", file);
     
@@ -94,11 +120,11 @@ export const AddBlog = (props) => {
     }
   };
 
-  const submitForm = async (closeModal) => {
+  const submitForm = async (closeModal:any) => {
     try {
       setLoading(true);
-      let submitData = { ...formData };
-      submitData.content = editorRef.current.getContent();
+      let submitData:any = { ...formData };
+      submitData.content = editorRef.current?.getContent();
 
       if (featuredImage != null) {
         let imageURL = await uploadImage(featuredImage);
@@ -286,7 +312,7 @@ export const AddBlog = (props) => {
                 
                 <div className="mt-4">
                   <Editor
-                  onInit={(evt, editor) => editorRef.current = editor}
+                  onInit={(evt:any, editor:any) => editorRef.current = editor}
                   apiKey='8j7wiv7q5l0b5pku7vldwja4uqqok48yoq6pl9nlq63x1koz'
                   ref={editorRef}
         initialValue={formData.content}
