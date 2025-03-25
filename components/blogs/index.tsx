@@ -52,17 +52,17 @@ export const Blogs = () => {
     }
   };
 
-  const onEdit = (id) => {
-    let blog = blogs.find((blog) => blog.id === id);
+  const onEdit = (id:any) => {
+    let blog:any = blogs.find((blog:any) => blog.id === id);
     setEdit(blog?.blog_id);
     onOpen();
   };
 
-  const handleSearch = (event) => {
+  const handleSearch = (event:any) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
     
-    const filtered = blogs.filter((blog) =>
+    const filtered = blogs.filter((blog:any) =>
       blog?.title?.toLowerCase().includes(query) || 
       blog?.author?.toLowerCase().includes(query) ||
       blog?.category?.toLowerCase().includes(query)
@@ -75,9 +75,9 @@ export const Blogs = () => {
     fetchData();
   }, []);
 
-  const onDelete = async (id) => {
+  const onDelete = async (id:any) => {
     alert(id)
-    const blog = blogs.find((blog) => blog.id === id);
+    const blog:any = blogs.find((blog:any) => blog.id === id);
     try {
       const response = await apiClient.delete(
         config.BACKEND_URL + "/v1/blogs/" + blog?.blog_id,
@@ -99,7 +99,7 @@ export const Blogs = () => {
     }
   };
 
-  const updateStatus = async (id, status) => {
+  const updateStatus = async (id:any, status:any) => {
     try {
       const response = await apiClient.post(
         config.BACKEND_URL + "/v1/blogs/updateStatus",
