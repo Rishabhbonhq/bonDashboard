@@ -18,36 +18,9 @@ import config from "@/config/config";
 import apiClient from "@/helpers/axiosRequest";
 import { toast } from 'react-hot-toast';
 import UploadInput from "../inputs/UploadInput";
-import { Editor } from '@tinymce/tinymce-react';
+import { convertToRaw } from "draft-js";
 
-/*************  ✨ Codeium Command ⭐  *************/
-/**
- * Component for adding and editing blog posts.
- * 
- * This component provides a modal interface for creating or updating a blog post. 
- * It handles form inputs for the blog title, description, featured image, status, 
- * and content. The content is managed via a rich text editor. Users can choose 
- * between different categories and set the blog status to either draft or published.
- * 
- * Props:
- * - props.data: Array of blog data for editing purposes.
- * - props.edit: ID of the blog being edited, if applicable.
- * - props.onOpen: Callback to open the modal.
- * - props.isOpen: Boolean indicating if the modal is open.
- * - props.onOpenChange: Callback for when modal open state changes.
- * - props.setEdit: Function to reset the edit state.
- * - props.fetchData: Callback to fetch updated blog data.
- * 
- * State:
- * - loading: Loading indicator for form submission.
- * - featuredImage: Image file for the blog post's featured image.
- * - formData: Object containing blog form data including title, image, content, status, and description.
- * - categories: Static array of blog categories.
- */
-
-/******  8c9b41d9-f8f5-4a2c-9f53-e5754d7ca9a4  *******/
 export const AddBlog = (props:any) => {
-  const editorRef:any = useRef(null);
   const [loading, setLoading] = useState(false);
   const [featuredImage, setFeaturedImage] = useState(null);
 
@@ -124,7 +97,9 @@ export const AddBlog = (props:any) => {
     try {
       setLoading(true);
       let submitData:any = { ...formData };
-      submitData.content = editorRef.current?.getContent();
+      console.log(submitData)
+      submitData.content = (submitData.content);
+
 
       if (featuredImage != null) {
         let imageURL = await uploadImage(featuredImage);
@@ -311,22 +286,27 @@ export const AddBlog = (props:any) => {
                 /> */}
                 
                 <div className="mt-4">
-                  <Editor
-                  onInit={(evt:any, editor:any) => editorRef.current = editor}
-                  apiKey='8j7wiv7q5l0b5pku7vldwja4uqqok48yoq6pl9nlq63x1koz'
-                  ref={editorRef}
-        initialValue={formData.content}
-        init={{
-          height: 300,
-          plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount'
-          ],
-          toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-        }}
-        
-      />
+                  <ReactQuill
+                    value={formData.content}
+                    onChange={handleContentChange}
+                    modules={{
+                      toolbar: [
+                        [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                        [{ size: [] }],
+                        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+                        ['link', 'image', 'video'],
+                        ['clean']
+                      ],
+                    }}
+                    formats={[
+                      'header', 'font', 'size',
+                      'bold', 'italic', 'underline', 'strike', 'blockquote',
+                      'list', 'bullet', 'indent',
+                      'link', 'image', 'video'
+                    ]}
+                    style={{ height: 300 }}
+                  />
                 </div>
               </ModalBody>
               <ModalFooter>

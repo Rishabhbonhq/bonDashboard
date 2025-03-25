@@ -9,6 +9,7 @@ import apiClient from "@/helpers/axiosRequest";
 import { useRouter } from "next/navigation";
 import { toast } from 'react-hot-toast';
 
+
 export const blogColumns = [
   { name: "TITLE", uid: "title", key: "title" },
   { name: "DESCRIPTION", uid: "description", key: "description" },
