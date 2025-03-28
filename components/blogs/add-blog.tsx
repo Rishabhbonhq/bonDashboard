@@ -19,6 +19,7 @@ import apiClient from "@/helpers/axiosRequest";
 import { toast } from 'react-hot-toast';
 import UploadInput from "../inputs/UploadInput";
 import { convertToRaw } from "draft-js";
+import { read } from "fs";
 
 export const AddBlog = (props:any) => {
   const [loading, setLoading] = useState(false);
@@ -34,7 +35,8 @@ export const AddBlog = (props:any) => {
     image: "",
     content: "",
     status: "DRAFT",
-    description: ""
+    description: "",
+    read_time: 0,
   });
 
   const [categories] = useState([
@@ -203,6 +205,7 @@ export const AddBlog = (props:any) => {
                     placeholder="Enter Blog Title"
                     variant="bordered"
                     value={formData.title}
+                    required
                   />
                    <Input
                     label="Description"
@@ -211,6 +214,7 @@ export const AddBlog = (props:any) => {
                     placeholder="Enter Blog Description"
                     variant="bordered"
                     value={formData.description}
+                    required
                   />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                  
@@ -270,6 +274,7 @@ export const AddBlog = (props:any) => {
                     onChange={handleFormChange}
                     selectedKeys={[formData.status]}
                     variant="bordered"
+                    required
                   >
                     <SelectItem key="draft">Draft</SelectItem>
                     <SelectItem key="published">Published</SelectItem>
@@ -287,6 +292,7 @@ export const AddBlog = (props:any) => {
                 
                 <div className="mt-4">
                   <ReactQuill
+                    
                     value={formData.content}
                     onChange={handleContentChange}
                     modules={{
