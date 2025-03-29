@@ -29,7 +29,7 @@ export const Blogs = () => {
   const fetchData = async () => {
     try {
       const response = await apiClient.get(
-        config.BACKEND_URL + "/v1/blogs?isAdmin=true", 
+        config.BACKEND_URL + "/v1/blogs/all?isAdmin=true", 
         {
           headers: { adminsecret: config.ADMIN_SECRET },
         }
