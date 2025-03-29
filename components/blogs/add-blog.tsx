@@ -340,7 +340,7 @@ export const AddBlog = (props:any) => {
                       'list', 'bullet', 'indent',
                       'link', 'image', 'video'
                     ]}
-                    style={{ height: 300 }}
+                    style={{ height: "200px", marginBottom: "60px" }}
                   />
                 </div>
               </ModalBody>
