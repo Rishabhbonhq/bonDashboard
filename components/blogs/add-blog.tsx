@@ -110,6 +110,11 @@ export const AddBlog = (props:any) => {
         }
       }
 
+      if(submitData.image === "") {
+        toast.error("Please upload a featured image")
+        return
+      }
+
       // Generate slug if not present
       if (!submitData.slug) {
         submitData.slug = submitData.title
@@ -134,6 +139,14 @@ export const AddBlog = (props:any) => {
           });
 
         if (response !== undefined) {
+          setFormData((prevState) => ({
+            ...prevState,
+            title: "",  
+            image: "",
+            content: "",
+            status: "DRAFT",
+            description: "",
+            read_time: 0,}));
           closeModal();
           toast.success(typeof response === "object" && response?.data?.message);
         }
@@ -162,6 +175,14 @@ export const AddBlog = (props:any) => {
 
 
         if (response !== undefined) {
+          setFormData((prevState) => ({
+            ...prevState,
+            title: "",  
+            image: "",
+            content: "",
+            status: "DRAFT",
+            description: "",
+            read_time: 0,}));
           closeModal();
           toast.success(typeof response === "object" && response?.data?.message);
         }
@@ -189,6 +210,14 @@ export const AddBlog = (props:any) => {
         size="3xl"
         onClose={() => {
           props.setEdit("");
+          setFormData((prevState) => ({
+            ...prevState,
+            title: "",  
+            image: "",
+            content: "",
+            status: "DRAFT",
+            description: "",
+            read_time: 0,}));
         }}
       >
         <ModalContent>

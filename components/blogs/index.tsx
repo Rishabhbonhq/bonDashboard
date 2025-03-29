@@ -29,7 +29,7 @@ export const Blogs = () => {
   const fetchData = async () => {
     try {
       const response = await apiClient.get(
-        config.BACKEND_URL + "/v1/blogs", 
+        config.BACKEND_URL + "/v1/blogs?isAdmin=true", 
         {
           headers: { adminsecret: config.ADMIN_SECRET },
         }
@@ -77,7 +77,6 @@ export const Blogs = () => {
   }, []);
 
   const onDelete = async (id:any) => {
-    alert(id)
     const blog:any = blogs.find((blog:any) => blog.id === id);
     try {
       const response = await apiClient.delete(
@@ -158,7 +157,7 @@ export const Blogs = () => {
           data={filteredBlogs} 
           onEdit={onEdit} 
           onDelete={onDelete} 
-          showDelete={false}
+          showDelete={true}
         />
       </div>
     </div>
